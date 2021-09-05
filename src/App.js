@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import {useState, useEffect} from 'react';
 import './App.css';
 import DataTable from './components/DataTable';
 
@@ -13,16 +13,23 @@ function App() {
     .then(d => setData(d.results))
   }, [])
 
+  const search = (rows) => {
+    // get heading or keys  like name & height and ...
+    const columns = rows[0] && Object.keys(rows[0]);
+    // for searching by any of keys
+    return rows.filter((row) => columns.some((column) => row[column].toString().toLowerCase().indexOf(q.toLowerCase()) > -1))
+  }
+
   return (
     <div>
-      <div>
-        <input type="text" value={q} onChange={(e) => setQ(e.target.value)} />
-      </div>
-      <div>
-        <DataTable data={data} />
-      </div>
+       <div>
+        <input type="text" value={q} onChange={(e) => setQ(e.target.value)}/>
+       </div>
+        <div>
+          <DataTable data={search(data)}/>
+        </div>
     </div>
-  );
+    );
 }
 
 export default App;
